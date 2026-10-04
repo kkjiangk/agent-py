@@ -4,6 +4,15 @@
 
 Install Python 3.10 or newer, uv, Node.js 22 or newer, and Docker with the Compose plugin. Confirm `uv`, `npm`, and `docker` are available and the Docker engine is running. The backend uses uv; the frontend and shared contracts use npm workspaces.
 
+The CLS SDK includes a native Snappy dependency. On Ubuntu/Debian, install its headers and a compiler before syncing Python dependencies:
+
+```bash
+sudo apt-get update
+sudo apt-get install --no-install-recommends -y build-essential libsnappy-dev
+```
+
+On macOS, install Xcode Command Line Tools and the Snappy library (`brew install snappy`) if no compatible wheel is available. The backend Docker image installs its native dependencies automatically. CI pins uv 0.12.5, matching the image build.
+
 For CLS integration, install the official `cls-mcp-server` CLI. The POSIX launcher can fall back to the version pinned in the JSON template through npx; the Windows launcher requires the CLI on PATH.
 
 ## Configure and launch
