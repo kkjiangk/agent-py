@@ -521,8 +521,9 @@ async def test_ready_endpoint_reports_milvus_readiness_without_startup_connectio
     assert vector_store.health_checks == 1
 
 
-def test_project_config_contains_milvus_settings() -> None:
-    config = json.loads(Path("../../config/project.json").read_text(encoding="utf-8"))
+def test_public_config_template_contains_milvus_settings() -> None:
+    template = Path(__file__).resolve().parents[3] / "config" / "project.template.json"
+    config = json.loads(template.read_text(encoding="utf-8"))
     vector_store = config["vectorStore"]
 
     assert vector_store["uri"] == "http://localhost:19530"

@@ -1,5 +1,7 @@
 # Agent Py
 
+[![CI](https://github.com/kkjiangk/agent-py/actions/workflows/ci.yml/badge.svg)](https://github.com/kkjiangk/agent-py/actions/workflows/ci.yml)
+
 A personal engineering project for investigating alerts with tool-backed evidence, retrieving runbooks, and reviewing remediation proposals. Built with **Python, FastAPI, Vue 3, LangGraph, Kafka, Redis, SQLite, and Milvus**.
 
 The backend coordinates persistent work, enforces user ownership, and streams progress to the browser. It uses actual configured MCP tools and model providers for diagnosis. The current UI is Chinese; repository documentation is English.
