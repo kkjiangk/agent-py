@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+      - run: uv sync --frozen
+        working-directory: apps/backend
+      - run: uv run ruff check .
+        working-directory: apps/backend
+      - run: uv run pyright
+        working-directory: apps/backend
+      - run: uv run pytest
+        working-directory: apps/backend
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run contracts:typecheck
+      - run: npm --workspace packages/api-contracts test
+      - run: npm run frontend:typecheck
+      - run: npm run frontend:test
+      - run: npm run frontend:build
+      - run: python3 scripts/check_frontend_bundle.py
+      - run: npm audit --audit-level=moderate
+      - run: npm run docs:build
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+      - run: uv sync --frozen
+        working-directory: apps/backend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm exec --workspace apps/frontend playwright install --with-deps chromium
+      - run: npm run frontend:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-test-evidence
+          path: |
+            apps/frontend/playwright-report
+            apps/frontend/test-results
+
+  event-transport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.10"
+      - run: uv sync --frozen
+        working-directory: apps/backend
+      - run: docker compose -f infra/compose.yaml up -d --wait kafka redis
+      - run: uv run pytest integration_tests
+        working-directory: apps/backend
+      - run: docker compose -f infra/compose.yaml logs kafka redis
+        if: failure()
+      - run: docker compose -f infra/compose.yaml down --volumes
+        if: always()
+
+  containers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - run: docker build -f apps/backend/Dockerfile -t agent-py-backend:ci .
+      - run: docker build -f apps/frontend/Dockerfile -t agent-py-frontend:ci .
+      - run: docker compose -f infra/compose.yaml config --quiet

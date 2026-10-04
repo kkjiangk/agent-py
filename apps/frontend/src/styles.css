@@ -1,0 +1,67 @@
+:root {
+  color: #202123;
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --canvas: #f7f7f8;
+  --surface: #f7f7f8;
+  --surface-raised: #ffffff;
+  --surface-inset: #f0f0f0;
+  --surface-hover: #ececee;
+  --surface-selected: #e9f7f2;
+  --rail: #202123;
+  --rail-hover: #2b2c2e;
+  --rail-text: #ececf1;
+  --rail-muted: #a8a8b3;
+  --text-primary: #202123;
+  --text-secondary: #5a5b64;
+  --text-tertiary: #85858d;
+  --line: #e5e5e7;
+  --line-strong: #d4d4d8;
+  --accent: #0f8a68;
+  --accent-strong: #08745a;
+  --accent-soft: #e5f6f0;
+  --accent-border: #a9dfcf;
+  --accent-focus: rgb(15 138 104 / 24%);
+  --focus-ring: rgb(32 33 35 / 20%);
+  --success: #0c7a5f;
+  --danger: #c13f3f;
+  --danger-soft: #fff1f0;
+  --warning: #9b6b12;
+  --status-neutral-bg: #f1f1f3;
+  --status-neutral-border: #dedee3;
+  --status-neutral-text: #63636d;
+  --status-waiting-bg: #fff7e6;
+  --status-waiting-border: #f0d69a;
+  --status-waiting-text: #84600e;
+  --status-running-bg: #e8f3ff;
+  --status-running-border: #b9d9f9;
+  --status-running-text: #1766a8;
+  --status-success-bg: #e7f6ef;
+  --status-success-border: #b9e0cd;
+  --status-success-text: #0a7659;
+  --status-danger-bg: #fff0ef;
+  --status-danger-border: #f0bcb8;
+  --status-danger-text: #b43834;
+  --shadow-float: 0 12px 32px rgb(0 0 0 / 10%);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --transition-fast: 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--canvas); }
+body { background: var(--canvas); margin: 0; min-width: 320px; min-height: 100vh; }
+button, input, select, textarea { font: inherit; }
+button { background: transparent; border: 0; color: var(--text-primary); cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+a { color: inherit; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+::selection { background: #c9eee1; color: #17352c; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}

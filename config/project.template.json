@@ -1,0 +1,129 @@
+{
+  "app": {
+    "env": "development",
+    "projectName": "agent-py"
+  },
+  "backend": {
+    "host": "127.0.0.1",
+    "port": 8000,
+    "memoryDatabaseUrl": "sqlite+aiosqlite:///./var/memory.sqlite3"
+  },
+  "frontend": {
+    "title": "Super AI",
+    "apiBaseUrl": "http://127.0.0.1:8000",
+    "publicAnalyticsKey": "local-dev-analytics-disabled"
+  },
+  "llm": {
+    "provider": "qwen-openai",
+    "apiKey": "",
+    "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "chatModel": "",
+    "embeddingModel": "",
+    "embeddingDimensions": 1024,
+    "rerankModel": "qwen3-vl-rerank",
+    "rerankUrl": "https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank",
+    "temperature": 0.2,
+    "timeoutSeconds": 120,
+    "maxRetries": 2
+  },
+  "chatAssembly": {
+    "defaultPromptId": "general-assistant",
+    "defaultSkillIds": ["frontend-design"],
+    "prompts": [
+      {"id": "general-assistant", "label": "通用助手", "description": "清晰、可靠地协助处理日常问题。", "instruction": "Answer clearly in Chinese unless technical terms require English."},
+      {"id": "operations-expert", "label": "运维诊断", "description": "优先基于证据解释运行问题和排查步骤。", "instruction": "For operational questions, present evidence, uncertainty, and next diagnostic steps."},
+      {"id": "knowledge-analyst", "label": "知识库分析", "description": "优先利用可用知识库来源并说明引用。", "instruction": "Use the knowledge tool when helpful and distinguish cited facts from inference."}
+    ],
+    "skills": [
+      {"id": "frontend-design", "label": "frontend-design", "description": "以可用性和一致的界面设计方法回答前端问题。", "instruction": "For frontend work, prioritize intentional interaction design, Chinese usability, and accessible visual hierarchy."},
+      {"id": "evidence-first", "label": "证据优先", "description": "先核对可靠来源和工具结果，再给出结论。", "instruction": "Separate verified evidence from assumptions and do not overstate confidence."},
+      {"id": "structured-analysis", "label": "结构化分析", "description": "用可执行的步骤组织复杂问题。", "instruction": "Organize complex responses into concise ordered steps with explicit decisions."}
+    ]
+  },
+  "vectorStore": {
+    "uri": "http://localhost:19530",
+    "collectionName": "knowledge_chunks",
+    "vectorDimension": 1024,
+    "indexType": "HNSW",
+    "metricType": "COSINE",
+    "timeoutSeconds": 10,
+    "indexParams": {
+      "M": 16,
+      "efConstruction": 200
+    },
+    "searchParams": {
+      "ef": 64
+    }
+  },
+  "docker": {
+    "appImageTag": "local",
+    "clsMcpServerVersion": "1.0.4",
+    "milvusImage": "milvusdb/milvus:v3.0.0"
+  },
+  "clsMcpServer": {
+    "transport": "sse",
+    "port": 3000,
+    "secretId": "",
+    "secretKey": "",
+    "timezone": "Asia/Shanghai"
+  },
+  "mcp": {
+    "clsSseUrl": "http://127.0.0.1:3000/sse",
+    "timeoutSeconds": 15,
+    "retries": 1
+  },
+  "prometheusAlerts": {
+    "timeoutSeconds": 5,
+    "sources": [
+      {
+        "id": "external-test-prometheus",
+        "type": "prometheus-v1",
+        "alertsApi": "",
+        "username": "",
+        "password": ""
+      },
+      {
+        "id": "local-alertmanager",
+        "type": "alertmanager-v2",
+        "alertsApi": "http://127.0.0.1:9093/api/v2/alerts"
+      }
+    ]
+  },
+  "eventIngestion": {
+    "bootstrapServers": "127.0.0.1:9092",
+    "clientId": "agent-py-alert-gateway",
+    "consumerGroup": "agent-py-aiops-workers-v1",
+    "alertsTopic": "oncall.alerts.v1",
+    "updatesTopic": "oncall.updates.v1",
+    "dlqTopic": "oncall.dlq.v1",
+    "remediationTopic": "oncall.remediation.commands.v1",
+    "redisUrl": "redis://127.0.0.1:6379/0",
+    "eventLeaseSeconds": 120,
+    "eventRetentionSeconds": 604800
+  },
+  "telemetry": {
+    "serviceName": "agent-py-backend",
+    "otlpHttpEndpoint": "",
+    "sampleRatio": 1.0
+  },
+  "clsLogUpload": {
+    "region": "",
+    "endpoint": "https://ap-guangzhou.cls.tencentcs.com",
+    "logsetId": "",
+    "topicId": "",
+    "defaultCount": 12,
+    "maxCount": 100
+  },
+  "aiopsDemo": {
+    "backendBaseUrl": "http://127.0.0.1:8000",
+    "email": "aiops-demo@agent-py.local",
+    "displayName": "AIOps Demo",
+    "password": "",
+    "pollIntervalSeconds": 2,
+    "indexWaitSeconds": 90
+  },
+  "minio": {
+    "accessKey": "",
+    "secretKey": ""
+  }
+}

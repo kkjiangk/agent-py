@@ -1,0 +1,29 @@
+{
+  "name": "agent-py-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/frontend",
+    "packages/api-contracts"
+  ],
+  "scripts": {
+    "frontend:dev": "npm --workspace apps/frontend run dev",
+    "frontend:typecheck": "npm --workspace apps/frontend run typecheck",
+    "frontend:test": "npm --workspace apps/frontend run test",
+    "frontend:e2e": "npm --workspace apps/frontend run test:e2e",
+    "frontend:build": "npm --workspace apps/frontend run build",
+    "contracts:typecheck": "npm --workspace packages/api-contracts run typecheck",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  },
+  "overrides": {
+    "vitepress": {
+      "vite": "^6.4.3"
+    }
+  }
+}

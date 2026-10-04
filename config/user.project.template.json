@@ -1,0 +1,21 @@
+{
+  "llm": {
+    "apiKey": "",
+    "chatModel": "qwen3.7-max",
+    "embeddingModel": "text-embedding-v4",
+    "modelCapabilities": {
+      "qwen3.7-max": {
+        "contextWindowTokens": 1000000
+      }
+    }
+  },
+  "clsMcpServer": {
+    "secretId": "",
+    "secretKey": ""
+  },
+  "clsLogUpload": {
+    "region": "ap-guangzhou",
+    "logsetId": "",
+    "topicId": ""
+  }
+}

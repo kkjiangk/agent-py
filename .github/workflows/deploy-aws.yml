@@ -1,0 +1,52 @@
+name: Deploy AWS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish-backend:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: ecr
+      - name: Build and push API image
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          REPOSITORY: ${{ vars.ECR_BACKEND_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -f apps/backend/Dockerfile -t "$REGISTRY/$REPOSITORY:$IMAGE_TAG" .
+          docker push "$REGISTRY/$REPOSITORY:$IMAGE_TAG"
+      - name: Deploy ECS service
+        env:
+          CLUSTER: ${{ vars.ECS_CLUSTER }}
+          API_SERVICE: ${{ vars.ECS_BACKEND_SERVICE }}
+          WORKER_SERVICE: ${{ vars.ECS_WORKER_SERVICE }}
+          API_CONTAINER: ${{ vars.ECS_API_CONTAINER }}
+          WORKER_CONTAINER: ${{ vars.ECS_WORKER_CONTAINER }}
+          HEALTH_URL: ${{ vars.API_HEALTH_URL }}
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+          REPOSITORY: ${{ vars.ECR_BACKEND_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: >-
+          python3 scripts/deploy_ecs.py --cluster "$CLUSTER"
+          --api-service "$API_SERVICE" --worker-service "$WORKER_SERVICE"
+          --api-container "$API_CONTAINER" --worker-container "$WORKER_CONTAINER"
+          --image "$REGISTRY/$REPOSITORY:$IMAGE_TAG" --health-url "$HEALTH_URL"
+      - name: Save deployment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: deployment-report.json
+          if-no-files-found: ignore

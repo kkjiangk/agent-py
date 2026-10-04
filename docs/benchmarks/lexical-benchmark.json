@@ -1,0 +1,49 @@
+{
+  "generatedAt": "2026-10-04T07:26:41.265070+00:00",
+  "python": "3.10.21",
+  "platform": "macOS-15.4-arm64-arm-64bit",
+  "seed": 42,
+  "benchmark": "BM25L index build versus reused index",
+  "limitations": "Single-process lexical microbenchmark; excludes database, Milvus, embedding, rerank, network and concurrent API traffic. Memory tracks Python index allocations, not total process RSS or source document storage.",
+  "results": [
+    {
+      "chunks": 1000,
+      "repeats": 10,
+      "coldBuildMs": 55.563,
+      "baselineP50Ms": 5.551,
+      "baselineP95Ms": 6.833,
+      "cachedP50Ms": 0.723,
+      "cachedP95Ms": 0.908,
+      "baselineQueriesPerSecond": 176.34,
+      "cachedQueriesPerSecond": 1340.21,
+      "indexPythonAllocationPeakMiB": 1.75,
+      "rankingsEquivalent": true
+    },
+    {
+      "chunks": 10000,
+      "repeats": 10,
+      "coldBuildMs": 48.504,
+      "baselineP50Ms": 64.576,
+      "baselineP95Ms": 104.227,
+      "cachedP50Ms": 10.215,
+      "cachedP95Ms": 44.319,
+      "baselineQueriesPerSecond": 12.81,
+      "cachedQueriesPerSecond": 52.68,
+      "indexPythonAllocationPeakMiB": 17.03,
+      "rankingsEquivalent": true
+    },
+    {
+      "chunks": 100000,
+      "repeats": 10,
+      "coldBuildMs": 700.012,
+      "baselineP50Ms": 991.515,
+      "baselineP95Ms": 1160.785,
+      "cachedP50Ms": 262.049,
+      "cachedP95Ms": 283.428,
+      "baselineQueriesPerSecond": 0.98,
+      "cachedQueriesPerSecond": 4.1,
+      "indexPythonAllocationPeakMiB": 176.21,
+      "rankingsEquivalent": true
+    }
+  ]
+}
